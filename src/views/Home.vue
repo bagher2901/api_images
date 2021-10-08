@@ -6,11 +6,9 @@
                 <div class="row mb-1">
                     <div class="col-3 p-0 mt-1 mb-1 slider">
                         <div class="row p-0">
-                            <img src="../assets/johnny-depp-wallpaper-13-1920x1080.jpg" alt="1" class="col-11">
-                            <img src="../assets/johnny-depp-wallpaper-26-1920x1080.jpg" alt="2" class="col-11">
-                            <img src="../assets/johnny-depp-wallpaper-27-1920x1080.jpg" alt="3" class="col-11">
-                            <img src="../assets/johnny-depp-wallpaper-45-1920x1080.jpg" alt="4" class="col-11">
-                            <img src="../assets/johnny-depp-wallpaper-5-1920x1080.jpg" alt="5" class="col-11">
+                            <div v-for="image in images">
+                                <img :key="image.id" :src="image.download_url" :alt="image.id" class="col-11">
+                            </div>
                         </div>
 
 
@@ -34,11 +32,31 @@
 
 <script>
     // @ is an alias to /src
-
+    import axios from 'axios';
 
     export default {
         name: 'Home',
-        components: {}
+        data() {
+            return {
+                images: []
+            }
+        },
+        components: {},
+        mounted: function () {
+            axios.get("https://picsum.photos/v2/list?page=2&limit=100", {
+                headers: {
+                    'Authorization': 'Bearer' + 'Your Bearer Pssword',
+                    "Content-Type": "application/json",
+                }
+            })
+                .then(response => {
+                    this.images = response.data
+                    console.log(this.images);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
     }
 </script>
 
